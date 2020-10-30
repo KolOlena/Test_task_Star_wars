@@ -1,7 +1,6 @@
 export default class StarWarsService {
 
   _requestBase = 'https://swapi.dev/api';
-  _imageBase = 'https://starwars-visualguide.com/assets/img'
 
   getResource = async (url) => {
     const res = await fetch(`${this._requestBase}${url}`);
@@ -23,10 +22,6 @@ export default class StarWarsService {
     return this._transformPlanet(planet);
   }
 
-
-  getPlanetImage = ({id}) => {
-    return `${this._imageBase}/planets/${id}.jpg`
-  }
   _extractId = (item) => {
     const idRegExp = /\/([0-9]*)\/$/;
     return item.url.match(idRegExp)[1];
@@ -39,7 +34,10 @@ export default class StarWarsService {
       population: planet.population,
       rotationPeriod: planet.rotation_period,
       diameter: planet.diameter,
-      climate: planet.climate
+      climate: planet.climate,
+      gravity: planet.gravity,
+      terrain:planet.terrain,
+      residents: planet.residents
     };
   };
 }

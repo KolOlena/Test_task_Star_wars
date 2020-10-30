@@ -4,3 +4,7 @@
 .col-sm {
     margin: 0 auto;
 }
+dl, ol, ul {
+    list-style: none;
+    display: inline-flex;
+}

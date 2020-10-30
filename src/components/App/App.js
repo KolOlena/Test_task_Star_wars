@@ -1,36 +1,27 @@
 import './App.css';
-import StarWarsService from "../../service/star-wars-service";
 import React, { Component } from 'react';
 import PlanetItem from "../PlanetItem";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+import PlanetInformation from "../PlanetInformation";
 
 
 export default class App extends Component {
-  StarWarsService = new StarWarsService();
-  //
-  // state = {
-  //   planetArray:null
-  // }
-  //
-  // componentDidMount() {
-  //   this.getPlanetList();
-  // }
-  //
-  // getPlanetList() {
-  //   this.StarWarsService.getAllPlanets().then((planet) => {
-  //     this.setState(
-  //       {
-  //         planetArray:planet,
-  //       }
-  //     )
-  //   })
-  // }
-  render() {
-    // const {planetArray} = this.state
 
+  render() {
     return (
-      <div className="container">
-          <PlanetItem getData={this.StarWarsService.getAllPlanets}/>
-      </div>
+      <Router>
+        <div className="container">
+          <Switch>
+            <Route path="/:id"
+                   render={({ match }) => {
+                     const { id } = match.params;
+                     return <PlanetInformation itemId={id} />
+                   }}/>
+            <Route exact path='/' component={PlanetItem}/>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
