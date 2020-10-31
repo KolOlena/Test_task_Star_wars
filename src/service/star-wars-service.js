@@ -5,8 +5,9 @@ export default class StarWarsService {
   getResource = async (url) => {
     const res = await fetch(`${this._requestBase}${url}`);
     if (!res.ok) {
-      throw new Error(`Could not fetch ${url}` +
-        `, received ${res.status}`)
+      throw new Error(`===`)
+      // (`Could not fetch ${url}` +
+      //   `, received ${res.status}`)
     }
     return await res.json();
   }

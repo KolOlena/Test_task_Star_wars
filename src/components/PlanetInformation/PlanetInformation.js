@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import './PlanetInformation.css'
 import StarWarsService from "../../service/star-wars-service";
+import ErrorPage from "../ErrorPage";
+import PlanetCard from "../PlanetCard";
 
 export default class PlanetInformation extends Component {
   StarWarsService = new StarWarsService();
 
   state = {
     planet: {},
-    residents: []
+    residents: [],
+    error: false
   }
 
+  onError = () => {
+    this.setState({
+      error: true,
+    });
+  };
 
   componentDidMount() {
     const {itemId} = this.props;
@@ -28,9 +35,11 @@ export default class PlanetInformation extends Component {
           })
           Promise.all(residentsArray).then(residents => {
             this.setState({residents})
-          });
+          })
+
         }
       })
+      .catch(this.onError)
 
   }
 
@@ -42,28 +51,31 @@ export default class PlanetInformation extends Component {
           item.push(`${key}: unknown`)
         } else {
           let residents = this.state.residents.map((resident) => (` ${resident.name}`))
-          item.push(`${key}: ${residents}`)}
+          item.push(`${key}: ${residents}`)
+        }
       } else {
-      item.push(`${key}: ${planet[key]}`)}
+        item.push(`${key}: ${planet[key]}`)
+      }
     }
 
     return item.map(el => <li className="list-group-item">{el}</li>)
   }
 
   render() {
-    const {planet} = this.state;
+    const {planet, error} = this.state;
+    const errorMessage = error ? <ErrorPage/> : null;
+    const items = this.renderItems(planet);
+    const content = items.length > 0 ? <PlanetCard items={items} name={planet.name}/>: null
+
+
     if (!planet) {
       return 'loading...';
     }
-    const items = this.renderItems(planet);
+
     return (
       <div className="card">
-        <div className="card-header">
-          Planet {planet.name}
-        </div>
-        <ul className="list-group list-group-flush">
-          {items}
-        </ul>
+        {errorMessage}
+        {content}
       </div>
     )
   }
