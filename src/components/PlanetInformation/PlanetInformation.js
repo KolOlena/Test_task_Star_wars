@@ -7,15 +7,12 @@ export default class PlanetInformation extends Component {
 
   state = {
     planet: {},
+    residents: []
   }
 
 
   componentDidMount() {
-    this.updatePlanet();
-  }
-
-  updatePlanet = () => {
-    const { itemId } = this.props;
+    const {itemId} = this.props;
     if (!itemId) {
       return;
     }
@@ -23,28 +20,51 @@ export default class PlanetInformation extends Component {
       .getPlanet(itemId)
       .then((planet) => {
         this.setState(({planet}))
+        const {residents} = this.state.planet
+        if (residents) {
+          const residentsArray = []
+          residents.forEach((resident) => {
+            residentsArray.push(this.StarWarsService.getResident(resident));
+          })
+          Promise.all(residentsArray).then(residents => {
+            this.setState({residents})
+          });
+        }
       })
-  };
+
+  }
+
+  renderItems(planet) {
+    let item = []
+    for (let key in planet) {
+      if (key === 'residents') {
+        if (planet[key].length == 0) {
+          item.push(`${key}: unknown`)
+        } else {
+          let residents = this.state.residents.map((resident) => (` ${resident.name}`))
+          item.push(`${key}: ${residents}`)}
+      } else {
+      item.push(`${key}: ${planet[key]}`)}
+    }
+
+    return item.map(el => <li className="list-group-item">{el}</li>)
+  }
 
   render() {
-    const { planet} = this.state;
-    const {name, population, rotationPeriod, diameter, climate, gravity, terrain, residents} = planet
-
+    const {planet} = this.state;
+    if (!planet) {
+      return 'loading...';
+    }
+    const items = this.renderItems(planet);
     return (
-        <div className="card">
-          <div className="card-header">
-            Planet {name}
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">Rotation Period: {rotationPeriod}</li>
-            <li className="list-group-item">Diameter: {diameter}</li>
-            <li className="list-group-item">Climate: {climate}</li>
-            <li className="list-group-item">Gravity: {gravity}</li>
-            <li className="list-group-item">Terrain: {terrain}</li>
-            <li className="list-group-item">Population: {population}</li>
-            <li className="list-group-item">Residents: {residents}</li>
-          </ul>
+      <div className="card">
+        <div className="card-header">
+          Planet {planet.name}
         </div>
+        <ul className="list-group list-group-flush">
+          {items}
+        </ul>
+      </div>
     )
   }
 }

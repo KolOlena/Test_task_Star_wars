@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 export default class PlanetItem extends Component {
   StarWarsService = new StarWarsService();
+
   getData=this.StarWarsService.getAllPlanets
 
   state = {
@@ -25,15 +26,16 @@ export default class PlanetItem extends Component {
   renderItems(arr) {
     return arr.map((planet) => {
       return (
-        <Link to={planet.id}>
             <div className="col-md-4">
+              <Link to={planet.id}>
               <ul className="list-group">
                 <li className="list-group-item">Название: {planet.name}</li>
                 <li className="list-group-item">Климат: {planet.climate}</li>
                 <li className="list-group-item">Население: {planet.population}</li>
               </ul>
+              </Link>
             </div>
-        </Link>
+
         )
     })
   }

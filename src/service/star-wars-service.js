@@ -22,9 +22,19 @@ export default class StarWarsService {
     return this._transformPlanet(planet);
   }
 
+  getResident = async (url) => {
+    const id = this._extractIdResidents(url)
+    const resident = await this.getResource(`/people/${id}/`);
+    return {name: resident.name};
+  }
+
   _extractId = (item) => {
     const idRegExp = /\/([0-9]*)\/$/;
     return item.url.match(idRegExp)[1];
+  }
+  _extractIdResidents = (url) => {
+    const idRegExp = /\/([0-9]*)\/$/;
+    return url.match(idRegExp)[1];
   }
 
   _transformPlanet = (planet) => {
