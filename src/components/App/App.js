@@ -1,7 +1,7 @@
 import './App.css';
 import React, { Component } from 'react';
 import PlanetItem from "../PlanetItem";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 
 import PlanetInformation from "../PlanetInformation";
 
@@ -13,12 +13,18 @@ export default class App extends Component {
       <Router>
         <div className="container">
           <Switch>
-            <Route path="/:id"
+            <Route exact path="/planet/:id"
                    render={({ match }) => {
                      const { id } = match.params;
                      return <PlanetInformation itemId={id} />
                    }}/>
-            <Route exact path='/' component={PlanetItem}/>
+            <Route exact path="/:id"
+                   render={({ match }) => {
+                     const { id } = match.params;
+                     return <PlanetItem page={id} />
+                   }}/>
+            <Route exact path='/1' component={PlanetItem}/>
+            <Redirect from='/' to='/1'/>
           </Switch>
         </div>
       </Router>

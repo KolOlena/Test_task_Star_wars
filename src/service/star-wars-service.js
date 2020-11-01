@@ -5,17 +5,28 @@ export default class StarWarsService {
   getResource = async (url) => {
     const res = await fetch(`${this._requestBase}${url}`);
     if (!res.ok) {
-      throw new Error(`===`)
-      // (`Could not fetch ${url}` +
-      //   `, received ${res.status}`)
+      throw new Error(`Could not fetch ${url}` +
+        `, received ${res.status}`)
     }
     return await res.json();
   }
 
 
-  getAllPlanets = async () => {
-    const res = await this.getResource(`/planets/`);
-    return res.results.map(this._transformPlanet);
+  getAllPlanets = async (page) => {
+    const pageUrl= '?page='
+    let request = null
+    let res;
+    if (page) {
+      request = `${pageUrl}${page}`
+      res = await this.getResource(`/planets/${request}`);
+    } else {
+      res = await this.getResource(`/planets/`);
+    }
+
+    return {
+      result: res.results.map(this._transformPlanet),
+      pages: res.count
+    };
   }
 
   getPlanet = async (id) => {

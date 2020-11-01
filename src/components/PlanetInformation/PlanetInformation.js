@@ -39,7 +39,9 @@ export default class PlanetInformation extends Component {
 
         }
       })
-      .catch(this.onError)
+      .catch(
+        this.onError
+  )
 
   }
 
@@ -65,12 +67,14 @@ export default class PlanetInformation extends Component {
     const {planet, error} = this.state;
     const errorMessage = error ? <ErrorPage/> : null;
     const items = this.renderItems(planet);
-    const content = items.length > 0 ? <PlanetCard items={items} name={planet.name}/>: null
 
 
     if (!planet) {
       return 'loading...';
     }
+
+    const content = items.length > 0 ? <PlanetCard items={items} name={planet.name}/>: null
+
 
     return (
       <div className="card">

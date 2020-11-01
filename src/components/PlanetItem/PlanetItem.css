@@ -11,3 +11,7 @@ a:hover {
     color: darkslateblue;
     text-decoration: none;
 }
+
+.pagination>a {
+    padding-left: 10px;
+}
